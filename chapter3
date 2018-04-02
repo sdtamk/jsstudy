@@ -166,7 +166,78 @@
 		<p>两大特点：任何关于NaN的操作都会返回NaN;NaN与任何职都不相等，包括NaN本身</p>
 		<p>可以使用isNaN()检测变量是否“不是数值”</p>
 		<p>尽管有点不可思议，isNaN()也可以检测对象，首先调用对象的valueof()方法，确定返回值是否能够转成数值，不能则基于返回值再调用toString()方法，再检测返回值。</p>
-
+		<p>4.数值转换</p>
+		<p>Number(),parseInt(),parseFloat()</p>
+		<p>Number()遵循以下规则：</p>
+		<ul>
+			<li>如果是Boolean,true转换成1，false转换成0</li>
+			<li>如果是数字，直接返回该值</li>
+			<li>如果是null,返回0</li>
+			<li>如果是undefined,返回NaN</li>
+			<li>如果是字符串
+				<ul>
+					<li>只包含数字（包括正负号），将其转换成10进制数值</li>
+					<li>包含有效的浮点数，将其转换成浮点数</li>
+					<li>包含有效的16进制数，将其转换成10进制数值</li>
+					<li>空字符串，返回0</li>
+					<li>其他形式返回NaN</li>
+				</ul>
+			</li>
+			<li>如果是对象，则调用对象的valueof()依照上述方法返回，如果返回NaN,则调用对象的toString()方法，再依照上述方法返回</li>
+		</ul>
+		<pre>
+			var a=Number("123");//123
+			var b=Number("");//0
+			var c=Number("1.1");//1.1
+			var d=Number("hello");//NaN
+		</pre>
+		<p>parseInt()</p>
+		<p>忽略前面的空格，第一个非空字符为数字，则继续解析后面的字符，直到解析完或者遇到非数字字符；第一个飞控字符不是数字则返回NaN</p>
+		<p>parseInt()可以识别不同进制的数字，0开头的按照8进制解析，0x开头的按照16进制解析</p>
+		<p>ECMAScript3与ECMAScript5对于parseInt()对于8进制的解析存在差异，"070"在ECMAScript3中会被解析成8进制数值56，ECMAScript5则会忽略前导零，解析成70.为了消除歧义，可以使用第二个参数指明使用的基数，parseInt("070",8)</p>
+		<p>因此为了避免错误的解析，建议始终指定第二个参数</p>
+		<pre>
+			var n1=parseInt("1234blue");//1234
+			var n2=parseInt("");//NaN
+			var n3=parseInt("0xa");//10
+			var n4=parseInt("22.5");//22
+			var n5=parseInt("070");//70
+			var n6=parseInt("070",8);//56
+		</pre>
+		<p>parseFloat()与parseInt()类似，第一个区别是parseFloat()能够识别第一个小数点,第二个区别parseFloat()始终忽略前导零，parseFloat()将16进制始终返回0，第三个区别parseFloat()只解析10进制数值，没有第二个参数选择</p>
+		<pre>
+			var f1=parseFloat("1234blue");//1234
+			var f2=parseFloat("");//NaN
+			var f3=parseFloat("0xa");//0
+			var f4=parseFloat("22.5");//22.5
+			var f5=parseFloat("070");//70
+		</pre>
+		<h3>3.4.6 String类型</h3>
+		<p>1.字符字面量</p>
+		<p>转义序列，参考文档或百度</p>
+		<pre>
+			var s="\u03a3";
+			var len=s.length;//1,转义序列表示一个字符
+		</pre>
+		<p>2.字符串的特点</p>
+		<p>字符串是不可变的，字符串一旦创建，它的值就不可变，要改变某个变量的值，首先要销毁原来的字符串，再重新创建</p>
+		<p>3.转换成字符串</p>
+		<p>使用toString()，几乎所有的值都有toString()，除了null和undefined。可以指定第二个参数，输出数值的基数</p>
+		<pre>
+			var s=10;
+			var s1=s.toString();//"10"
+			var s2=s.toString(8);//"12"
+			var s3=s.toString(16);//"a"
+		</pre>
+		<p>使用String()方法，如果存在toString()方法，则调用toString(),否则null返回"null",undefined返回"undefined"</p>
+		<pre>
+			var s=10;
+			var s1=String(s);//"10"
+			var sn=null;
+			var s2=String(sn);//"null"
+			var su;
+			var s3=String(su);//"undefined"
+		</pre>
 	</section>
 	</div>
 </body>
