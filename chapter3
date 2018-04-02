@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>javascript学习20180312</title>
+	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script>
+
+	</script>
+</head>
+<body>
+	<div class="container-fluid">
+	<h2>延迟脚本与异步脚本</h2>
+	<ul>
+		<li>defer属性：延迟脚本。基本不再支持，实际使用将脚本放到页面底部加载</li>
+		<li>async属性:不保证加载顺序，确定脚本没有依赖关系非常重要,建议不要再异步脚本中修改dom</li>
+	</ul>
+	<h2>&lt;noscript&gt;标签</h2>
+	<p>对于不支持javascript的浏览器显示标签内的元素</p>
+	<noscript>您不支持js</noscript>
+	<section>
+		<h2>3.基本概念</h2>
+		<h3>3.1.1区分大小写</h3>
+		<h3>3.1.2标识符</h3>
+		<ul>
+			<li>第一个字符必须为字母、下划线(_)或美元符号($)</li>
+			<li>其他字符可以是字母、下划线、美元符号或数字</li>
+		</ul>
+		<p>按照惯例，采用驼峰大小写格式，第一个字母小写，剩下每个单词首字母大写。</p>
+		<h3>3.1.3注释</h3>
+		<p>//单行注释</p>
+		<p>/*
+		块级注释	
+		*/</p>
+		<h3>3.1.4严格模式</h3>
+		<p>html5引入了严格模式(strict mode)</p>
+		<p>顶部添加代码 "use strict"</p>
+		<h3>3.1.5语句</h3>
+		<p>语句以分号(;)结束，非必须，为了避免歧义建议统一使用</p>
+		<p>if语句只有一条语句可以不使用代码块，但建议统一使用代码块。</p>
+		<h3>3.3变量</h3>
+		<p>ECMAScript的变量是松散型，可以保存任何数据</p>
+		<p>var msg="hi";
+			<br>
+			msg=10;//有效但不推荐
+		</p>
+		<p>注意点：var 声明的变量为局部变量，函数退出后会被销毁</p>
+		<pre>
+			function test(){
+				var a=10;
+			}
+			test()
+			alert(a);//错误
+		</pre>
+		<p>可以像下面使用</p>
+		<pre>
+			function test(){
+				//省略了var,变量就变成了全局变量，<b>只要调用过一次test()</b>,这个变量就有了定义，就可以在函数外部调用
+				//不推荐使用，
+				a=10;
+			}
+			test();
+			alert(a);
+
+		</pre>
+		<h3>3.4数据类型</h3>
+		<p>ECMAScript数据类型：Undefined,Null,Bollean,Number,String，还有复杂类型Object</p>
+		<h3>typeof</h3>
+		<p>返回数据类型，"undefined","bollean","string","number","object","function"</p>
+		<h3>3.4.2 Undefined</h3>
+		<p>使用var声明，但未初始化的变量的值就是undefined</p>
+		<p>包含undefined值得变量与未定义的变量是不一样的。</p>
+		<pre>
+			var message;
+			//下面这个变量未声明
+			//var age; 
+			alert(message);//"undefined"
+			//产生错误,对于未声明的变量只能执行一项操作:typeof(也可以执行delete操作，但没有意义，严格模式下会导致错误)
+			alert(age);
+		</pre>
+		<p>令人困惑的是，对于未初始化的变量执行typeof,返回"undefined",对于未声明的变量执行typeof也会返回"undefined"</p>
+		<p>两个变量从技术上存在本质的区别，但实际哪种变量都无法执行真正的操作。</p>
+		<p>因此显示的初始化变量是明智的选择，这样可以通过typeof返回"undefined"来判断变量是否未声明</p>
+		<pre>
+			var message;
+			alert(typeof message);//"undefined"
+			alert(typeof age);//"undefined"
+		</pre>
+		<h3>3.4.3 NULL</h3>
+		<p>NULL是第二个只有一个值的数据类型。值为null，null表示一个空对象指针，因此使用typeof,返回object
+		</p>
+		<p>实际上undefined值派生自null值，因此比较undefined与null会返回true</p>
+		<p>虽然如此，但两者用途完全不同，不会声明一个变量显示的设置为undefined，但null却不同，声明一个对象变量，未保存真正的对象前，应该明确的赋值null</p>
+		<h3>3.4.4 Boolean</h3>
+		<p>Boolean类型字面值true和false是区分大小写的，True和False(及其他混合形式)都不是Boolean值，只是标识符</p>
+		<p>虽然Boolean只有两个字面值，但其他类型都有与这两个值等价的值,可以使用Boolean()进行类型转换</p>
+		<table class="table table-bordered">
+			<tr>
+				<td>数据类型</td>
+				<td>true值</td>
+				<td>false值</td>
+			</tr>
+			<tr>
+				<td>Boolean</td>
+				<td>true</td>
+				<td>false</td>
+			</tr>
+			<tr>
+				<td>String</td>
+				<td>任何非空字符串</td>
+				<td>""(空字符串)</td>
+			</tr>
+			<tr>
+				<td>Number</td>
+				<td>任何非零数字（包括吴无穷大）</td>
+				<td>0和NaN</td>
+			</tr>
+			<tr>
+				<td>Object</td>
+				<td>任何对象</td>
+				<td>null</td>
+			</tr>
+			<tr>
+				<td>Undefined</td>
+				<td>n/a(not applicable 不适用)</td>
+				<td>undefined</td>
+			</tr>
+		</table>
+		<h3>3.4.5 Number类型</h3>
+		<p>除了10进制外还可以使用8进制或16进制字面量值表示</p>
+		<p>8进制：第一位必须是0，然后是8进制数字序列(0~7)，如果字面值，前导0会被忽略，当做10进制数字</p>
+		<pre>
+			var a=070;//8进制的56
+			var b=090;//10进制的90
+		</pre>
+		<p>8进制字面量在严格模式下是无效的，会导致错误</p>
+		<p>16进制：前两位必须是0x,后跟16进制数字序列(0~9,A~F),其中A~F可以大写也可以小写</p>
+		<pre>
+			var a=0xA;//16进制的10
+			var b=0x1f;//16进制的31
+		</pre>
+		<p>
+			在进行计算时，所有的8进制数和16进制数，都会转换成10进制数值
+		</p>
+		<p>鉴于JavaScript保存数值的方式，可以保存正零和负零，两者认为是相等的。</p>
+		<p>1.浮点数：数值包含小数点，且小数点后至少有一个数字，<b>虽然小数点前可以没有数字，但不推荐</b></p>
+		<p>由于浮点数需要的内存空间是整数的两倍，因此ECMAScript会不失时机的将浮点数转换成整数值</p>
+		<p>浮点数的精度远不如整数，如0.1+0.2不等于0.3而是0.30000000000000004</p>
+		<pre>
+			if(a+b==0.3){         //不要做这样的测试
+
+		}
+		</pre>
+		<p><b>浮点数计算差生误差，是因为使用基于IEEE754数值的浮点计算的通病，其他使用相同数值格式的语言存在同样的问题</b></p>
+		<p>2.数值范围</p>
+		<p>ECMAScript不能保存世界上所有的数值，最小值Number.MIN-VALUE,最大值Number.MAX_VALUE</p>
+		<p>如果数值超出范围则会被转成Infinity(正无穷Infinity,负无穷-Infinity)</p>
+		<p>确定一个数值是否是有穷的可以使用isFinite()</p>
+		<pre>
+			var a=Number.MAX_VALUE+Number.MAX_VALUE;
+			alert(isFinite(a));//false
+		</pre>
+		<p>3.NaN</p>
+		<p>NaN(Not a Number),是一个特殊的值，表示本来返回数值的操作数未返回数值的情况。</p>
+		<p><b>在ECMAScript中任何数字除以0返回NaN,因此不会影响其他代码的执行，其他语言会报错。</b></p>
+		<p>两大特点：任何关于NaN的操作都会返回NaN;NaN与任何职都不相等，包括NaN本身</p>
+		<p>可以使用isNaN()检测变量是否“不是数值”</p>
+		<p>尽管有点不可思议，isNaN()也可以检测对象，首先调用对象的valueof()方法，确定返回值是否能够转成数值，不能则基于返回值再调用toString()方法，再检测返回值。</p>
+
+	</section>
+	</div>
+</body>
+</html>
