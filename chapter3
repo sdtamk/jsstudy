@@ -335,10 +335,45 @@
 		<p>7.无符号的右移</p>
 		<p>操作符由3个大于号表示(>>>)，将数值的所有位向右移动指定位数，符号位会发生移动，对于正数与有符号的右移一致，对于负数，会将二进制码当成正数的二进制码，由于负数的二进制码以其绝对值的二进制的补码表示，无符号右移会导致结果非常大。</p>
 		<pre>
-			var a=64>>5;
-			// 64  00000000000000000000000001000000
-			// >>  00000000000000000000000000000010
-			console.log(a);//2
+			var a=-64>>>5;
+			// 64    00000000000000000000000001000000
+			//64反码 11111111111111111111111110111111
+			//64补码 11111111111111111111111111000000   （负数的二进制码）
+			// >>>   00000111111111111111111111111110
+			console.log(a);//134217726
+		</pre>
+		<h3>3.5.3 布尔操作符</h3>
+		<p>布尔操作符共3个：非(NOT)、与(AND)、或(OR)</p>
+		<p>1.逻辑非</p>
+		<p>操作符使用叹号(!)表示，可以应用与ECMAScript中的任何类型，返回一个布尔值。首先将操作数转换成布尔值，然后取反。</p>
+
+		<p>2.逻辑与</p>
+		<p>操作符使用两个和号(&&)表示，返回两个布尔操作数操作的结果，同时为true返回true，否则返回false。</p>
+		<p>逻辑与属于短路操作，如果第一个操作数能够决定结果，则第二个操作数不会执行</p>
+		<pre>
+			var isSuccess=true;
+			var result1=isSuccess&&someUndefinedVariable;//报错
+			console.log(result1);//不会执行
+
+			var isFailed=false;
+			var result2=isFailed&&someUndefinedVariable;//不会报错
+			console.log(result2);//false
+		</pre>
+		<p>3.逻辑或</p>
+		<p>操作符使用两个竖线(||)表示，返回两个布尔操作数操作的结果，同时为false返回false，否则返回false。</p>
+		<p>逻辑或也属于短路操作，如果第一个操作数能够决定结果，则第二个操作数不会执行</p>
+		<pre>
+			var isSuccess=true;
+			var result1=isSuccess||someUndefinedVariable;//不会报错
+			console.log(result1);//true
+
+			var isFailed=false;
+			var result2=isFailed||someUndefinedVariable;//报错
+			console.log(result2);//不会执行
+		</pre>
+		<p>可以利用逻辑或用来避免为变量赋null或undefined</p>
+		<pre>
+			var myObject=preferredObject||backupObject;//preferredObject不为null，则将其赋值给变量，否则使用backupObject赋值给变量
 		</pre>
 	</section>
 	</div>
